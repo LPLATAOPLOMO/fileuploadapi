@@ -7,19 +7,16 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname,'/public')))
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, "/uploads/"));
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  });
-  
-  const upload = multer({ storage: storage });
+  const upload = multer();
 
-app.post('/api/fileup', upload.single('upfile'), function (req, res, next) {
-    res.send(req.file)
+app.post('/api/fileup', upload.single('upfile'), function (req, res, next) {;
+    const x = {
+      name: req.file.originalname,
+      type: req.file.mimetype,
+      size: req.file.size
+    }
+    // console.log(req.file.filename);
+    res.send(x);
 })
 
 app.listen(port, () => {
